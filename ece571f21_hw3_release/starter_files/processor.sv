@@ -107,19 +107,18 @@ task CPU_rdReq(input bit [3:0] page, bit [11:0] baseaddr);
 	@(posedge clk);
 endtask: CPU_rdReq
 
-
+                                    
 //------------- CPU write request --------------------
 //- writes data to memory array.  Also stores it in 
 //- TBMEM[baseaddr]..TBMEM[baseaddr + 3]
 //---------------------------------------------------
 task CPU_wrReq(input bit [3:0] page, bit [11:0] baseaddr, bit [15:0] data0, data1, data2, data3);
 	
-	//FIRST ERROR I DONT UNDERSTAND?
-	//logic //the size of the data buffer i think 16 bits and 5th elemnt
+	logic [15:0] dbuffer[4];	//write buffer
 	logic errCnt;
 	int 	i;
 	
-	if(page==MEMPAGE1) begin
+	if(page == MEMPAGE1) begin
 		TBMem[(baseaddr + 0) % MEMSIZE] = data0;
 		TBMem[(baseaddr + 1) % MEMSIZE] = data1;
 		TBMem[(baseaddr + 2) % MEMSIZE] = data2;
@@ -128,16 +127,16 @@ task CPU_wrReq(input bit [3:0] page, bit [11:0] baseaddr, bit [15:0] data0, data
 	// mapping the states of the FSM
 	@(posedge clk)			//stateA
 		busdrive<=1;
-		ad[15:12]<=page;
+		ad[15:12]<=page;                                                               
 		ad[11:0]<=baseaddr;
 							
 		MBUS.AddrValid<=1;					
 		MBUS.rw<=0;
-		total_errors<=0;
+		errCnt<=0;
 					
 							
 		@(posedge clk);
-		//MBUS.addrValid<=0;					
+		MBUS.AddrValid<=0;					
 		ad<=data0;
 		@(posedge clk);
 		ad<=data1;
@@ -146,7 +145,7 @@ task CPU_wrReq(input bit [3:0] page, bit [11:0] baseaddr, bit [15:0] data0, data
 		@(posedge clk);
 		ad<=data3;
 endtask: CPU_wrReq
-
+	
 
 
 // set up initial conditions
@@ -155,6 +154,8 @@ initial begin: setup
 	foreach (TBMem[i]) begin
 		TBMem[i] = 0;
 	end
+	
+		total_errors = 0;
 	
 	// I don't think we need the other code
 	
@@ -166,7 +167,7 @@ end: setup
 
 // apply test cases to the model
 initial begin: stimulus
-    $display("ECE 571 Fall 2021: (HW #3) Processor simulator for Memory controller testbench - <YOUR NAME> (YOUR EMAIL ADDRESS)");
+    $display("ECE 571 Fall 2021: (HW #3) Processor simulator for Memory controller testbench - <Ramaa> (rgp2@pdx.edu)");
     $display("Sources: %s\n", getenv("PWD"));
    
     // ADD YOUR CODE HERE
@@ -177,39 +178,39 @@ initial begin: stimulus
 	//4. write to the first 4 locations at the wrong page
 
 	//1. first 16 locations
+	wait(resetH == 0)
 	$display("Writing to the first 16 locations of the memory");
-	CPU_wrReq(MEMPAGE1, 16'h0012, 16'h0014, 16'h0016, 16'h0018);
-	CPU_wrReq(MEMPAGE1, 16'h00AA, 16'h00AC, 16'h00AE, 16'h00AF);
-	CPU_wrReq(MEMPAGE1, 16'h0005, 16'h0000, 16'h0001, 16'h000B);
-	CPU_wrReq(MEMPAGE1, 16'h0009, 16'h0003, 16'h0006, 16'h0007);
+	CPU_wrReq(MEMPAGE1, 12'h000,16'h0012, 16'h0014, 16'h0016, 16'h0018);
+	CPU_wrReq(MEMPAGE1, 12'h030,16'h00AA, 16'h00AC, 16'h00AE, 16'h00AF);
+	CPU_wrReq(MEMPAGE1, 12'h023,16'h0005, 16'h0000, 16'h0001, 16'h000B);
+	CPU_wrReq(MEMPAGE1, 12'h0CD,16'h0009, 16'h0003, 16'h0006, 16'h0007);
 	
 	//2. reading those locations
-	$display("Reading them from the memory");
-	CPU_rdReq(MEMPAGE1, 16'h0014 );
-	CPU_rdReq(MEMPAGE1, 16'h00AC );
-	CPU_rdReq(MEMPAGE1, 16'h0000 );
-	CPU_rdReq(MEMPAGE1, 16'h0003 );
+	$display("\nReading them from the memory");
+	CPU_rdReq(MEMPAGE1, 12'h110 );
+	CPU_rdReq(MEMPAGE1, 12'hAA0 );	
+	CPU_rdReq(MEMPAGE1, 12'h0F0 );
+	CPU_rdReq(MEMPAGE1, 12'h700 );
 	
 	//3. writing to the stop of the memory and read it back
 	$display("writing to the top of the memory and read it back");
-	CPU_wrReq(MEMPAGE1, 16'h0101,16'h0104, 16'h01AA);
-	CPU_rdReq(MEMPAGE1,16'h0101);
+	CPU_wrReq(MEMPAGE1, 12'h215,16'h0101,16'h0104, 16'h01AA,16'h123A);
+	CPU_rdReq(MEMPAGE1,12'h215);
 	
 	//4. Write to the top of the memory and read it back using wraparound technique
 	$display("Write to the top of the memory and read it back using wraparound technique");
-	CPU_wrReq(MEMPAGE1,16'hAAAA,16'hBBBB, 16'hCCCC );
-	CPU_rdReq(MEMPAGE1, 16'hAAAA);
+	CPU_wrReq(MEMPAGE1,12'h0FF,16'hAAAA,16'hBBBB, 16'hCCCC,16'h00FF );
+	CPU_rdReq(MEMPAGE1,12'h0FF);
 		
 	//5. write to the first 4 locations at the wrong page
 	$display("write to the first 4 locations at the wrong page");
-	CPU_wrReq(MEMPAGE2, 16'h0000,16'h0A00,16'hFFFF);
-	CPU_rdReq(MEMPAGE1,16'h0000);	
+	CPU_wrReq(MEMPAGE2, 12'h111,16'h0000,16'h0A00,16'h4AAA,16'hFFFF);
+	CPU_rdReq(MEMPAGE1, 12'h111);	
 	//testing till here
 	
 	//to find if the design has erros
-	repeat(10)
-	@ (posedge clk)
-		if(total_errors==0)	begin
+	repeat(10) 	@ (posedge clk);
+		if(total_errors== 0)	begin
 			$display("Error-free code");	end
 		else				begin
 			$display("%d errors found in the code after completely testing.",total_errors); end 
