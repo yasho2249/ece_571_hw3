@@ -1,0 +1,95 @@
+# Compile of main_bus_if.sv was successful.
+# Compile of mc_defs.sv was successful.
+# Compile of memory_controller.sv was successful.
+# Compile of processor.sv was successful.
+# Compile of tb_mc_top.sv was successful.
+# 5 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading sv_std.std
+# Loading work.mc_defs(fast)
+# Loading work.tb_mc_top_sv_unit(fast)
+# Loading work.tb_mc_top(fast)
+# Loading work.main_bus_if_sv_unit(fast)
+# Loading work.main_bus_if(fast__1)
+# Loading work.memory_controller_sv_unit(fast)
+# Loading work.memory_controller(fast)
+# Loading work.processor(fast)
+run -all
+# ECE 571 Fall 2021: (HW #3) Processor simulator for Memory controller testbench - Roy Kravitz (roy.kravitz@pdx.edu)
+# Sources: N:/PSUCourseProjects/ece571f21/rkravitz/hw3/sim
+# 
+# Write to the first 16 locations of the memory
+#                   45 Memory Write to Page: 0002, Address 0000 to Address 0003:
+# 			data0: 000f, data1: 000e, data2: 000d, data3: 000c
+#                  115 Memory Write to Page: 0002, Address 0004 to Address 0007:
+# 			data0: 000b, data1: 000a, data2: 0009, data3: 0008
+#                  185 Memory Write to Page: 0002, Address 0008 to Address 000b:
+# 			data0: 0007, data1: 0006, data2: 0005, data3: 0004
+#                  255 Memory Write to Page: 0002, Address 000c to Address 000f:
+# 			data0: 0003, data1: 0002, data2: 0001, data3: 000f
+# 
+# Read the locations we wrote from the memory
+#                  386 Memory Read from Address 000c to Address 000f:
+# 			200c:	Mem data = 0003	Expected = 0003
+# 			200d:	Mem data = 0002	Expected = 0002
+# 			200e:	Mem data = 0001	Expected = 0001
+# 			200f:	Mem data = 000f	Expected = 000f
+# Memory data matches...so far, so good
+#                  456 Memory Read from Address 0008 to Address 000b:
+# 			2008:	Mem data = 0007	Expected = 0007
+# 			2009:	Mem data = 0006	Expected = 0006
+# 			200a:	Mem data = 0005	Expected = 0005
+# 			200b:	Mem data = 0004	Expected = 0004
+# Memory data matches...so far, so good
+#                  526 Memory Read from Address 0004 to Address 0007:
+# 			2004:	Mem data = 000b	Expected = 000b
+# 			2005:	Mem data = 000a	Expected = 000a
+# 			2006:	Mem data = 0009	Expected = 0009
+# 			2007:	Mem data = 0008	Expected = 0008
+# Memory data matches...so far, so good
+#                  596 Memory Read from Address 0000 to Address 0003:
+# 			2000:	Mem data = 000f	Expected = 000f
+# 			2001:	Mem data = 000e	Expected = 000e
+# 			2002:	Mem data = 000d	Expected = 000d
+# 			2003:	Mem data = 000c	Expected = 000c
+# Memory data matches...so far, so good
+# 
+# Write to the top of the memory and read it back
+#                  605 Memory Write to Page: 0002, Address 0ffc to Address 0fff:
+# 			data0: 00ff, data1: 0100, data2: 0101, data3: 0102
+#                  736 Memory Read from Address 0ffc to Address 0fff:
+# 			2ffc:	Mem data = 00ff	Expected = 00ff
+# 			2ffd:	Mem data = 0100	Expected = 0100
+# 			2ffe:	Mem data = 0101	Expected = 0101
+# 			2fff:	Mem data = 0102	Expected = 0102
+# Memory data matches...so far, so good
+# 
+# Write to the very top of the memory and read it back...should wrap-around
+#                  745 Memory Write to Page: 0002, Address 0fff to Address 1002:
+# 			data0: ffff, data1: eeee, data2: dddd, data3: cccc
+#                  876 Memory Read from Address 0fff to Address 1002:
+# 			2fff:	Mem data = ffff	Expected = ffff
+# 			3000:	Mem data = eeee	Expected = eeee
+# 			3001:	Mem data = dddd	Expected = dddd
+# 			3002:	Mem data = cccc	Expected = cccc
+# Memory data matches...so far, so good
+# 
+# Write to the first 4 locations at the wrong page
+#                  885 Read back the right page to make sure it wasn't corrupted
+#                  885 Memory Write to Page: 0003, Address 0000 to Address 0003:
+# 			data0: 000f, data1: 000e, data2: 000d, data3: 000c
+#                 1016 Memory Read from Address 0000 to Address 0003:
+# 			2000:	Mem data = eeee	Expected = eeee
+# 			2001:	Mem data = dddd	Expected = dddd
+# 			2002:	Mem data = cccc	Expected = cccc
+# 			2003:	Mem data = 000c	Expected = 000c
+# Memory data matches...so far, so good
+# Test complete - no errors detected, take the rest of the day off
+# 
+# End simulation of ECE 571 Fall 2021: (HW #3) Memory controller testbench - Roy Kravitz (roy.kravitz@pdx.edu)
+# 
+# ** Note: $stop    : N:/PSUCourseProjects/ece571f21/rkravitz/hw3/hdl/processor.sv(209)
+#    Time: 1075 ns  Iteration: 1  Instance: /tb_mc_top/CPU
+# Break in NamedBeginStat stimulus at N:/PSUCourseProjects/ece571f21/rkravitz/hw3/hdl/processor.sv line 209
