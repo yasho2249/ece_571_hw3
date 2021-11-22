@@ -1,0 +1,34 @@
+N:/ece571f21/ywagle/hw3/prob1/processor.sv {1 {vlog -work work -vopt -sv -stats=none N:/ece571f21/ywagle/hw3/prob1/processor.sv
+QuestaSim-64 vlog 2021.2 Compiler 2021.04 Apr 14 2021
+-- Compiling program processor
+-- Importing package mc_defs
+
+Top level modules:
+	processor
+
+} {} {}} N:/ece571f21/ywagle/hw3/prob1/main_bus_if.sv {1 {vlog -work work -vopt -sv -stats=none N:/ece571f21/ywagle/hw3/prob1/main_bus_if.sv
+QuestaSim-64 vlog 2021.2 Compiler 2021.04 Apr 14 2021
+-- Compiling package main_bus_if_sv_unit
+-- Importing package mc_defs
+-- Compiling interface main_bus_if
+
+Top level modules:
+	--none--
+
+} {} {}} N:/ece571f21/ywagle/hw3/prob1/mc_defs.sv {1 {vlog -work work -vopt -sv -stats=none N:/ece571f21/ywagle/hw3/prob1/mc_defs.sv
+QuestaSim-64 vlog 2021.2 Compiler 2021.04 Apr 14 2021
+-- Compiling package mc_defs
+
+Top level modules:
+	--none--
+
+} {} {}} N:/ece571f21/ywagle/hw3/prob1/tb_mc_top.sv {1 {vlog -work work -vopt -sv -stats=none N:/ece571f21/ywagle/hw3/prob1/tb_mc_top.sv
+QuestaSim-64 vlog 2021.2 Compiler 2021.04 Apr 14 2021
+-- Compiling package tb_mc_top_sv_unit
+-- Importing package mc_defs
+-- Compiling module tb_mc_top
+
+Top level modules:
+	tb_mc_top
+
+} {} {}}
