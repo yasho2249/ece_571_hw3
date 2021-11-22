@@ -1,0 +1,119 @@
+# Compile of main_bus_if.sv was successful.
+# Compile of mc_defs.sv was successful.
+# Compile of memory_controller.sv was successful.
+# Compile of processor.sv was successful.
+# Compile of tb_mc_top.sv was successful.
+# 5 compiles, 0 failed with no errors.
+vsim -gui -voptargs=+acc work.tb_mc_top
+# vsim -gui -voptargs="+acc" work.tb_mc_top 
+# Start time: 21:00:47 on Nov 21,2021
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading sv_std.std
+# Loading work.mc_defs(fast)
+# Loading work.tb_mc_top_sv_unit(fast)
+# Loading work.tb_mc_top(fast)
+# Loading work.main_bus_if_sv_unit(fast)
+# Loading work.main_bus_if(fast__1)
+# Loading work.memory_controller_sv_unit(fast)
+# Loading work.memory_controller(fast)
+# Loading work.processor(fast)
+add wave -position insertpoint  \
+sim:/tb_mc_top/DUT/PAGE \
+sim:/tb_mc_top/DUT/page \
+sim:/tb_mc_top/DUT/baseaddr \
+sim:/tb_mc_top/DUT/cntr \
+sim:/tb_mc_top/DUT/addr \
+sim:/tb_mc_top/DUT/DataIn \
+sim:/tb_mc_top/DUT/DataOut \
+sim:/tb_mc_top/DUT/clk \
+sim:/tb_mc_top/DUT/resetH \
+sim:/tb_mc_top/DUT/rdEn \
+sim:/tb_mc_top/DUT/wrEn \
+sim:/tb_mc_top/DUT/busdrive \
+sim:/tb_mc_top/DUT/M \
+sim:/tb_mc_top/DUT/state \
+sim:/tb_mc_top/DUT/next_state
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: ywagle  Hostname: FAB26  ProcessID: 12204
+#           Attempting to use alternate WLF file "./wlftmmtr0g".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftmmtr0g
+add wave -position insertpoint  \
+sim:/tb_mc_top/CPU/clk \
+sim:/tb_mc_top/CPU/resetH \
+sim:/tb_mc_top/CPU/busdrive \
+sim:/tb_mc_top/CPU/TBMem \
+sim:/tb_mc_top/CPU/ad \
+sim:/tb_mc_top/CPU/total_errors
+run -all
+# ECE 571 Fall 2021: (HW #3) Processor simulator for Memory controller testbench - Yashodhan Wagle (ywagle@pdx.edu)
+# Sources: N:/ece571f21/ywagle/hw3/prob1
+# 
+# Writing to the first 16 locations of the memory
+#                   45 Memory Write to Page: 0002, Address 0000 to Address 0003:
+# 			data0: 0012, data1: 0014, data2: 0016, data3: 0018
+#                   95 Memory Write to Page: 0002, Address 0030 to Address 0033:
+# 			data0: 00aa, data1: 00ac, data2: 00ae, data3: 00af
+#                  145 Memory Write to Page: 0002, Address 0023 to Address 0026:
+# 			data0: 0005, data1: 0000, data2: 0001, data3: 000b
+#                  195 Memory Write to Page: 0002, Address 00cd to Address 00d0:
+# 			data0: 0009, data1: 0003, data2: 0006, data3: 0007
+# 
+# Reading them from the memory
+#                  306 Memory Read from (base)Address 0110 to Address 0113:
+# 			2110:	Mem data = 0000	Expected = 0000
+# 			2111:	Mem data = 0000	Expected = 0000
+# 			2112:	Mem data = 0000	Expected = 0000
+# 			2113:	Mem data = 0000	Expected = 0000
+# Memory data matches...so far, so good
+#                  376 Memory Read from (base)Address 0aa0 to Address 0aa3:
+# 			2aa0:	Mem data = 0000	Expected = 0000
+# 			2aa1:	Mem data = 0000	Expected = 0000
+# 			2aa2:	Mem data = 0000	Expected = 0000
+# 			2aa3:	Mem data = 0000	Expected = 0000
+# Memory data matches...so far, so good
+#                  446 Memory Read from (base)Address 00f0 to Address 00f3:
+# 			20f0:	Mem data = 0000	Expected = 0000
+# 			20f1:	Mem data = 0000	Expected = 0000
+# 			20f2:	Mem data = 0000	Expected = 0000
+# 			20f3:	Mem data = 0000	Expected = 0000
+# Memory data matches...so far, so good
+#                  516 Memory Read from (base)Address 0700 to Address 0703:
+# 			2700:	Mem data = 0000	Expected = 0000
+# 			2701:	Mem data = 0000	Expected = 0000
+# 			2702:	Mem data = 0000	Expected = 0000
+# 			2703:	Mem data = 0000	Expected = 0000
+# Memory data matches...so far, so good
+# writing to the top of the memory and read it back
+#                  525 Memory Write to Page: 0002, Address 0215 to Address 0218:
+# 			data0: 0101, data1: 0104, data2: 01aa, data3: 123a
+#                  636 Memory Read from (base)Address 0215 to Address 0218:
+# 			2215:	Mem data = 0101	Expected = 0101
+# 			2216:	Mem data = 0104	Expected = 0104
+# 			2217:	Mem data = 01aa	Expected = 01aa
+# 			2218:	Mem data = 123a	Expected = 123a
+# Memory data matches...so far, so good
+# Write to the top of the memory and read it back using wraparound technique
+#                  645 Memory Write to Page: 0002, Address 00ff to Address 0102:
+# 			data0: aaaa, data1: bbbb, data2: cccc, data3: 00ff
+#                  756 Memory Read from (base)Address 00ff to Address 0102:
+# 			20ff:	Mem data = aaaa	Expected = aaaa
+# 			2100:	Mem data = bbbb	Expected = bbbb
+# 			2101:	Mem data = cccc	Expected = cccc
+# 			2102:	Mem data = 00ff	Expected = 00ff
+# Memory data matches...so far, so good
+# write to the first 4 locations at the wrong page
+#                  765 Memory Write to Page: 0003, Address 0111 to Address 0114:
+# 			data0: 0000, data1: 0a00, data2: 4aaa, data3: ffff
+#                  876 Memory Read from (base)Address 0111 to Address 0114:
+# 			2111:	Mem data = 0000	Expected = 0000
+# 			2112:	Mem data = 0000	Expected = 0000
+# 			2113:	Mem data = 0000	Expected = 0000
+# 			2114:	Mem data = 0000	Expected = 0000
+# Memory data matches...so far, so good
+# No Errors!
+# End simulation of ECE 571 Fall 2021: (HW #3) Memory controller testbench - Yashodhan Wagle (ywagle@pdx.edu)
+# 
+# ** Note: $stop    : N:/ece571f21/ywagle/hw3/prob1/processor.sv(223)
+#    Time: 985 ns  Iteration: 1  Instance: /tb_mc_top/CPU
+# Break in NamedBeginStat stimulus at N:/ece571f21/ywagle/hw3/prob1/processor.sv line 223
