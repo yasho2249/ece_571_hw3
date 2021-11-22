@@ -4,8 +4,8 @@
 // NOTE:  YOU DO NOT NEED TO USE THIS CODE OR EVEN LOOK AT IT.  I INCLUDED
 // IT TO GIVE YOU AN IDEA OF HOW TO USE TASKS TO PERFORM OPERATIONS.
 //
-// Author:	<YOUR NAME>
-// Date:	<THE DATE>
+// Author:	Yashodhan Wagle <ywagle@pdx.edu> and Ramaa Potnis <rgp2@pdx.edu>
+// Date:	11/20/2021
 //
 // Description:
 // ------------
@@ -89,7 +89,7 @@ task CPU_rdReq(input bit [3:0] page, bit [11:0] baseaddr);
 	end
 	
 	#1;
-	$display($time,, "Memory Read from Address %4h to Address %4h:", baseaddr, (baseaddr + 3));
+	$display($time,, "Memory Read from (base)Address %4h to Address %4h:", baseaddr, (baseaddr + 3));
 	for (i = 0; i < DATAPAYLOADSIZE; i++) begin
 		$display("\t\t\t%4h:\t\Mem data = %4h\tExpected = %4h", 
 				(ad + i), dbuffer[i], TBMem[((baseaddr + i) % MEMSIZE)]);
@@ -122,8 +122,15 @@ task CPU_wrReq(input bit [3:0] page, bit [11:0] baseaddr, bit [15:0] data0, data
 		TBMem[(baseaddr + 0) % MEMSIZE] = data0;
 		TBMem[(baseaddr + 1) % MEMSIZE] = data1;
 		TBMem[(baseaddr + 2) % MEMSIZE] = data2;
-		TBMem[(baseaddr + 3) % MEMSIZE] = data3;	end
-		
+		TBMem[(baseaddr + 3) % MEMSIZE] = data3;	
+		end
+	
+	$display($time,, "Memory Write to Page: %4h, Address %4h to Address %4h:", page, baseaddr, (baseaddr + 3));
+	for (i = 0; i < DATAPAYLOADSIZE; i++) begin
+		$display("\t\t\tdata0: %4h, data1: %4h, data2: %4h, data3: %4h", 
+				data0, data1, data2, data3)]);
+	end
+
 	// mapping the states of the FSM
 	@(posedge clk)			//stateA
 		busdrive<=1;
@@ -167,7 +174,7 @@ end: setup
 
 // apply test cases to the model
 initial begin: stimulus
-    $display("ECE 571 Fall 2021: (HW #3) Processor simulator for Memory controller testbench - <Ramaa> (rgp2@pdx.edu)");
+    $display("ECE 571 Fall 2021: (HW #3) Processor simulator for Memory controller testbench - Yashodhan Wagle (ywagle@pdx.edu)");
     $display("Sources: %s\n", getenv("PWD"));
    
     // ADD YOUR CODE HERE

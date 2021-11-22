@@ -4,8 +4,8 @@
 // NOTE:  YOU DO NOT NEED TO USE THIS CODE OR EVEN LOOK AT IT.  I INCLUDED
 // IT TO INTEGRATE THE MEMORY INTO THE CONTROLLER MODULE
 //
-// Author:	<YOUR NAME>
-// Date:	<THE DATE>
+// Author:	Yashodhan Wagle <ywagle@pdx.edu>
+// Date:	11/20/2021
 //
 // Description:
 // ------------
@@ -54,10 +54,10 @@ assign resetH = MBUS.resetH;
 //---------------------------------
 
 // declare the memory array
-logic [BUSWIDTH-1:0]    M[MEMSIZE]; // memory array
+logic [BUSWIDTH-1:0]    M[MEMSIZE]; // memory array. Only one page declared
 
 // generate DataIn to the memory array from the AddrData bus
-assign DataIn = MBUS.AddrData;      // data to the memory array (writes)     
+assign DataIn = MBUS.AddrData;      // data to the memory array (writes)    
 assign MBUS.AddrData = ((page == PAGE) && busdrive) ? DataOut : 'z;  // data from the memory array (reads)
 assign addr = baseaddr + cntr;
 
@@ -90,7 +90,7 @@ end: init_array
 //---------------------------------
 
 // ADD YOUR CODE HERE
-//fsm 
+// FSM for protocol implementation
 
 typedef enum logic[3:0] {A = 4'b0000, RB = 4'b0001, RC = 4'b0010, RD = 4'b0011, RE = 4'b0100, WB = 4'b0101, WC = 4'b0110, WD = 4'b0111, WE = 4'b1000} state_t;
 state_t state, next_state; 
@@ -105,6 +105,7 @@ else
 end
 
 //next_state logic
+// States derived from the timing diagram
 always_comb
 begin
 case(state)
@@ -158,7 +159,7 @@ case(state)
 		busdrive = 1'b1;
 		end
 	WB:	begin
-		if (page == PAGE) begin
+		if (page == PAGE) begin		//doesnt implement if page == PAGE
 			rdEn = 1'b0;
 			wrEn = 1'b1;
 			cntr = 4'b0000;
