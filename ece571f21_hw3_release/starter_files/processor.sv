@@ -126,10 +126,7 @@ task CPU_wrReq(input bit [3:0] page, bit [11:0] baseaddr, bit [15:0] data0, data
 		end
 	
 	$display($time,, "Memory Write to Page: %4h, Address %4h to Address %4h:", page, baseaddr, (baseaddr + 3));
-	for (i = 0; i < DATAPAYLOADSIZE; i++) begin
-		$display("\t\t\tdata0: %4h, data1: %4h, data2: %4h, data3: %4h", 
-				data0, data1, data2, data3)]);
-	end
+	$display("\t\t\tdata0: %4h, data1: %4h, data2: %4h, data3: %4h", data0, data1, data2, data3);
 
 	// mapping the states of the FSM
 	@(posedge clk)			//stateA
@@ -218,11 +215,11 @@ initial begin: stimulus
 	//to find if the design has erros
 	repeat(10) 	@ (posedge clk);
 		if(total_errors== 0)	begin
-			$display("Error-free code");	end
+			$display("No Errors!");	end
 		else				begin
 			$display("%d errors found in the code after completely testing.",total_errors); end 
 			
-	$display("End simulation of ECE 571 Fall 2021: (HW #3) Memory controller testbench - <Ramaa> (rgp2@pdx.edu)\n");	
+	$display("End simulation of ECE 571 Fall 2021: (HW #3) Memory controller testbench - Yashodhan Wagle (ywagle@pdx.edu)\n");	
 	$stop;
 end: stimulus
 
