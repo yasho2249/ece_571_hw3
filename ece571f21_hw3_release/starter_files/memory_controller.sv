@@ -92,7 +92,7 @@ end: init_array
 // ADD YOUR CODE HERE
 //fsm 
 
-typedef enum {A, RB, RC, RD, RE, WB, WC, WD, WE} state_t;
+typedef enum logic[3:0] {A = 4'b0000, RB = 4'b0001, RC = 4'b0010, RD = 4'b0011, RE = 4'b0100, WB = 4'b0101, WC = 4'b0110, WD = 4'b0111, WE = 4'b1000} state_t;
 state_t state, next_state; 
 
 //seq block 
@@ -107,65 +107,87 @@ end
 //next_state logic
 always_comb
 begin
-unique case(state)
+case(state)
 	A: 	next_state = MBUS.AddrValid ? (MBUS.rw ? RB : WB) : A;
 	RB:	next_state = RC;
 	RC:	next_state = RD;
 	RD:	next_state = RE;
-	RE:	next_state = MBUS.AddrValid ? (MBUS.rw ? RB : WB) : A;
-	WB:	next_state = RC;
-	WC:	next_state = RD;
-	WD:	next_state = RE;
-	WE:	next_state = MBUS.AddrValid ? (MBUS.rw ? RB : WB) : A;
+	RE:	next_state = A;
+	//RE:	next_state = MBUS.AddrValid ? (MBUS.rw ? RB : WB) : A;
+	WB:	next_state = WC;
+	WC:	next_state = WD;
+	WD:	next_state = WE;
+	WE:	next_state = A;
+	//WE:	next_state = MBUS.AddrValid ? (MBUS.rw ? RB : WB) : A;
 endcase
 end 
 
 //output logic
 always_comb
 begin
-unique case(state)
+case(state)
 	A:	begin
-		{page,baseaddr} = DataIn;
+		page = DataIn[15:12];
+		baseaddr = DataIn[11:0];
+		busdrive = 1'b0;
+		rdEn = 1'b0;
+		wrEn = 1'b0;
 		end
 	RB:	begin
 		rdEn = 1'b1;
+		wrEn = 1'b0;
 		cntr = 4'b0000;
 		busdrive = 1'b1;
 		end
 	RC:	begin
 		rdEn = 1'b1;
+		wrEn = 1'b0;
 		cntr = 4'b0001;
 		busdrive = 1'b1;
 		end
 	RD:	begin
 		rdEn = 1'b1;
+		wrEn = 1'b0;
 		cntr = 4'b0010;
 		busdrive = 1'b1;
 		end
 	RE:	begin
 		rdEn = 1'b1;
+		wrEn = 1'b0;
 		cntr = 4'b0011;
 		busdrive = 1'b1;
 		end
 	WB:	begin
-		wrEn = 1'b1;
-		cntr = 4'b0000;
-		busdrive = 1'b0;
+		if (page == PAGE) begin
+			rdEn = 1'b0;
+			wrEn = 1'b1;
+			cntr = 4'b0000;
+			busdrive = 1'b0;
+			end
 		end
 	WC:	begin
-		wrEn = 1'b1;
-		cntr = 4'b0001;
-		busdrive = 1'b0;
+		if (page == PAGE) begin
+			rdEn = 1'b0;
+			wrEn = 1'b1;
+			cntr = 4'b0001;
+			busdrive = 1'b0;
+			end
 		end
 	WD:	begin
-		wrEn = 1'b1;
-		cntr = 4'b0010;
-		busdrive = 1'b0;
+		if (page == PAGE) begin
+			rdEn = 1'b0;
+			wrEn = 1'b1;
+			cntr = 4'b0010;
+			busdrive = 1'b0;
+			end
 		end
 	WE:	begin
-		wrEn = 1'b1;
-		cntr = 4'b0011;
-		busdrive = 1'b0;
+		if (page == PAGE) begin
+			rdEn = 1'b0;
+			wrEn = 1'b1;
+			cntr = 4'b0011;
+			busdrive = 1'b0;
+			end
 		end
 endcase
 end

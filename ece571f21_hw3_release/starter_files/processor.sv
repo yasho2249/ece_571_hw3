@@ -215,7 +215,7 @@ initial begin: stimulus
 		else				begin
 			$display("%d errors found in the code after completely testing.",total_errors); end 
 			
-    $display("End simulation of ECE 571 Fall 2021: (HW #3) Memory controller testbench - <Ramaa> (rgp2@pdx.edu)\n");	
+	$display("End simulation of ECE 571 Fall 2021: (HW #3) Memory controller testbench - <Ramaa> (rgp2@pdx.edu)\n");	
 	$stop;
 end: stimulus
 
